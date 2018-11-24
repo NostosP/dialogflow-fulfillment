@@ -20,21 +20,17 @@ server.post('/get-movie-details', (req, res) => {
     const movieToSearch = req.body.queryResult.parameters.movie;
     const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
     var options = {
-        uri: reqUrl,
-        qs: {
-            access_token: 'xxxxx xxxxx' // -> uri + '?access_token=xxxxx%20xxxxx'
-        },
-        headers: {
-            'User-Agent': 'Request-Promise'
-        },
-        json: true // Automatically parses the JSON string in the response
+        "method": "GET",
+        "uri": reqUrl,
+        "json": true, // Automatically parses the JSON string in the response
+        "headers": {
+            "User-Agent": "My little demo app"
+        }
     };
     rp(options).
-        then(function (repos){
-            const movie = JSON.parse(repos);
-            let dataToSend = movieToSearch === 'The Godfather' ? `I don't have the required info on that. Here's some info on 'The Godfather' instead.\n` : '';
-            dataToSend += `${movie.Title} is a ${movie.Actors} starer ${movie.Genre} movie, released in ${movie.Year}. It was directed by ${movie.Director}`;
-
+        then(function (result){
+            let dataToSend = '';
+            dataToSend = `${result.Title} is a ${result.Actors} starer ${result.Genre} movie, released in ${result.Year}. It was directed by ${result.Director}`;
             return res.json({                
                 "fulfillmentText": dataToSend,
                 "source": "https://safe-journey-43214.herokuapp.com/get-movie-details",                
