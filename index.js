@@ -13,7 +13,7 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
-server.post('/get-movie-details', (req, res) => {
+server.post('/', (req, res) => {
 
     const movieToSearch = req.body.queryResult.parameters.movie;
     const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
