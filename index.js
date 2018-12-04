@@ -15,24 +15,31 @@ server.use(bodyParser.json());
 
 server.post('/', (req, res) => {
 
-    const movieToSearch = req.body.queryResult.parameters.movie;
-    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
     var options = {
         method: "GET",
         uri: reqUrl,
         json: true, // Automatically parses the JSON string in the response
     };
+
+    if (req.body.queryResult.intent.displayName == "Find Player Intent - Get Name") {
+        const playerToSearch = req.body.queryResult.parameters.player;
+        const reqUrl = encodeURI(`http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`);
+        console.log(reqUrl);
+    }
+    
+    
+    
     rp(options).
         then(function (result){
             if (result.Response == 'True') {
                 let dataToSend = '';
-                dataToSend = `${result.Title} is a ${result.Actors} starer ${result.Genre} movie, released in ${result.Year}. It was directed by ${result.Director}`;
+                dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
                 return res.json({                
                     "fulfillmentText": dataToSend,
                     "source": "https://safe-journey-43214.herokuapp.com/get-movie-details"               
                 });
             } else return res.json({                
-                "fulfillmentText": "Sorry, couldn't find your movie",
+                "fulfillmentText": "Sorry, I couldn't find your player",
                 "source": "https://safe-journey-43214.herokuapp.com/get-movie-details"               
             });
             
