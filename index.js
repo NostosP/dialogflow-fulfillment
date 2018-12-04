@@ -37,8 +37,7 @@ server.post('/', (req, res) => {
                 let resp2 = req.body.queryResult.intent.displayName;
                 let url = `https://evening-tor-72395.herokuapp.com/webapi/players/${playerToSearch}`
                 return res.json({
-                    "fulfillmentText": "Couldn't find player " + resp + " at " + url,
-                    "error": err
+                    "fulfillmentText": "Couldn't find player " + resp + " at " + url
                 })
             });
     }    
