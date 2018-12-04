@@ -1,4 +1,5 @@
 var rp = require('request-promise');
+var isEmpty = require('./isEmpty');
 
 module.exports = function (req, res) {
     const playerToSearch = req.body.queryResult.parameters.player;
@@ -11,6 +12,9 @@ module.exports = function (req, res) {
 
     rp(options).
         then(function (result){
+            if (isEmpty(result)) {
+                throw "There's no player with id " + playerToSearch + " in the database";
+            }
             let dataToSend = '';
             dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
             return res.json({                
@@ -19,7 +23,7 @@ module.exports = function (req, res) {
         })
         .catch(function (err){
             return res.json({
-                "fulfillmentText": "Couldn't find player " + playerToSearch + " at " + reqUrl,
+                "fulfillmentText": "Something went wrong!",
                 "error": err
             })
         });
