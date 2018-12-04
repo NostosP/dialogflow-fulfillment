@@ -36,7 +36,7 @@ server.post('/', (req, res) => {
         .catch(function (err){
             let resp = req.body.queryResult.parameters.player; 
             return res.json({
-                "fulfillmentText": resp,
+                "fulfillmentText": "Couldn't find player " + resp,
                 "source": "https://safe-journey-43214.herokuapp.com"
             })
         });
