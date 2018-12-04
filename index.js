@@ -36,7 +36,7 @@ server.post('/', (req, res) => {
             let resp = req.body.queryResult.parameters.player; 
             let resp2 = req.body.queryResult.intent.displayName;
             return res.json({
-                "fulfillmentText": "Couldn't find player " + resp + " at " + resp2;
+                "fulfillmentText": "Couldn't find player " + resp + " at " + resp2
             })
         });
     
