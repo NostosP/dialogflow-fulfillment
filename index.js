@@ -22,24 +22,25 @@ server.post('/', (req, res) => {
             uri: reqUrl,
             json: true, // Automatically parses the JSON string in the response
         };
-    }    
-    
-    rp(options).
-        then(function (result){
-            let dataToSend = '';
-            dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
-            return res.json({                
-                "fulfillmentText": dataToSend               
-            });            
-        })
-        .catch(function (err){
-            let resp = req.body.queryResult.parameters.player; 
-            let resp2 = req.body.queryResult.intent.displayName;
-            return res.json({
-                "fulfillmentText": "Couldn't find player " + resp + " at " + resp2
+
+        rp(options).
+            then(function (result){
+                let dataToSend = '';
+                dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
+                return res.json({                
+                    "fulfillmentText": dataToSend       
+                });            
             })
-        });
-    
+            .catch(function (err){
+                let resp = req.body.queryResult.parameters.player; 
+                let resp2 = req.body.queryResult.intent.displayName;
+                let url = `http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`
+                return res.json({
+                    "fulfillmentText": "Couldn't find player " + resp + " at " + url,
+                    "intent": resp2
+                })
+            });
+    }    
 });
 
 server.listen((process.env.PORT || 8000), () => {
