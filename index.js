@@ -34,8 +34,9 @@ server.post('/', (req, res) => {
             });            
         })
         .catch(function (err){
+            let resp = req.body.queryResult.parameters.player; 
             return res.json({
-                "fulfillmentText": "Something went wrong!",
+                "fulfillmentText": resp,
                 "source": "https://safe-journey-43214.herokuapp.com"
             })
         });
