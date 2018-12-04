@@ -37,7 +37,7 @@ server.post('/', (req, res) => {
                 let url = `http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`
                 return res.json({
                     "fulfillmentText": "Couldn't find player " + resp + " at " + url,
-                    "intent": resp2
+                    "error": err
                 })
             });
     }    
