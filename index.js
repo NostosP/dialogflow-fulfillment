@@ -16,7 +16,8 @@ server.post('/', (req, res) => {
 
     if (req.body.queryResult.intent.displayName == "Find Player Intent - Get Name") {
         const playerToSearch = req.body.queryResult.parameters.player;
-        let reqUrl = encodeURI(`http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`);        
+        // let reqUrl = encodeURI(`http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`);        
+        let reqUrl = encodeURI(`https://evening-tor-72395.herokuapp.com/webapi/players/${playerToSearch}`);                
         var options = {
             method: "GET",
             uri: reqUrl,
@@ -34,7 +35,7 @@ server.post('/', (req, res) => {
             .catch(function (err){
                 let resp = req.body.queryResult.parameters.player; 
                 let resp2 = req.body.queryResult.intent.displayName;
-                let url = `http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`
+                let url = `https://evening-tor-72395.herokuapp.com/webapi/players/${playerToSearch}`
                 return res.json({
                     "fulfillmentText": "Couldn't find player " + resp + " at " + url,
                     "error": err
