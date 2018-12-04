@@ -2,7 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-var rp = require('request-promise');
+var getPlayerById = require('./getPlayerById');
+var getTeamByName = require('./getTeamByName');
 
 const server = express();
 
@@ -12,35 +13,17 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
+
 server.post('/', (req, res) => {
 
     if (req.body.queryResult.intent.displayName == "Find Player Intent - Get Name") {
-        const playerToSearch = req.body.queryResult.parameters.player;
-        let reqUrl = encodeURI(`http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`);                       
-        var options = {
-            method: "GET",
-            uri: reqUrl,
-            json: true, // Automatically parses the JSON string in the response
-        };
+        console.log("Finding player...")
+        getPlayerById(req, res);        
+    } else if (req.body.queryResult.intent.displayName == "Find Team Intent - Get Name") {        
+        console.log("Finding team...")
+        getTeamByName(req, res);
+    }
 
-        rp(options).
-            then(function (result){
-                let dataToSend = '';
-                dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
-                return res.json({                
-                    "fulfillmentText": dataToSend       
-                });            
-            })
-            .catch(function (err){
-                let resp = req.body.queryResult.parameters.player; 
-                let resp2 = req.body.queryResult.intent.displayName;
-                let url = `http://localhost:8080/provaTesi/webapi/players/${playerToSearch}`
-                return res.json({
-                    "fulfillmentText": "Couldn't find player " + resp + " at " + url,
-                    "error": err
-                })
-            });
-    }    
 });
 
 server.listen((process.env.PORT || 8000), () => {
