@@ -29,15 +29,14 @@ server.post('/', (req, res) => {
             let dataToSend = '';
             dataToSend = `${result.firstName} ${result.lastName} is ${result.age} years old`;
             return res.json({                
-                "fulfillmentText": dataToSend,
-                "source": "https://safe-journey-43214.herokuapp.com"               
+                "fulfillmentText": dataToSend               
             });            
         })
         .catch(function (err){
             let resp = req.body.queryResult.parameters.player; 
+            let resp2 = req.body.queryResult.intent.displayName;
             return res.json({
-                "fulfillmentText": "Couldn't find player " + resp,
-                "source": "https://safe-journey-43214.herokuapp.com"
+                "fulfillmentText": "Couldn't find player " + resp + " at " + resp2;
             })
         });
     
