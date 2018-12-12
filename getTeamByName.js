@@ -28,9 +28,13 @@ module.exports = function (req, res) {
             });            
         })
         .catch(function (err){
+            if (err.error.code == "ECONNREFUSED") {
+                return res.json({
+                    "fulfillmentText" : "Sorry, there's no connection with the database!"
+                })
+            }
             return res.json({
-                "fulfillmentText": "Something went wrong!",
-                "error": err
+                "fulfillmentText": err
             })
         });
 }
