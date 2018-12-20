@@ -25,6 +25,7 @@ server.post('/', (req, res) => {
         getTeamByName(req, res);
     } else if (req.body.queryResult.intent.displayName == "Image Intent") {
         console.log("Finding image...");
+        console.log(JSON.stringify(req.body.originalDetectIntentRequest, null, 2));
         return res.json({
             "fulfillmentText": "Here is your image",
             "fulfillmentMessages": [
