@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var getPlayerById = require('./getPlayerById'),
     getTeamByName = require('./getTeamByName'),
+    notification = require('./notification'),
     port = process.env.PORT || 8000;   
 
 const server = express();
@@ -25,7 +26,6 @@ server.post('/', (req, res) => {
         getTeamByName(req, res);
     } else if (req.body.queryResult.intent.displayName == "Image Intent") {
         console.log("Finding image...");
-        console.log(JSON.stringify(req.body.originalDetectIntentRequest, null, 2));
         return res.json({
             "fulfillmentText": "Here is your image",
             "fulfillmentMessages": [
@@ -38,6 +38,12 @@ server.post('/', (req, res) => {
                 }
             ]
         });
+    } else if (req.body.queryResult.intent.displayName == "Notification Intent") {
+        console.log('Sending notification...');
+        notification(req.body.originalDetectIntentRequest.payload.token);
+        return res.json({
+            "fulfillmentText" : 'Notification sent!'
+        })
     }
 
 });
