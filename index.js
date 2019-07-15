@@ -24,7 +24,7 @@ server.post('/', (req, res) => {
             getPlayerInfo(req, res);}
             break;
         case "GetSessionInfo": {
-            console.log("FInding training session...")
+            console.log("Finding training session...")
             getSessionInfo(req, res)
             }
             break;

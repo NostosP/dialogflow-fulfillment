@@ -2,9 +2,12 @@ var rp = require('request-promise');
 var url = `http://localhost:8082/players`;
 
 module.exports = function (req, res) {
+    // Parse player
     const playerToSearch = req.body.queryResult.parameters.player;
     const firstName = playerToSearch.split(" ")[0];
     const lastName = playerToSearch.split(" ")[1];
+
+    // Builds request uri with query params
     const reqUrl = encodeURI(url + `?firstname=${firstName}&lastname=${lastName}`);                      
     var options = {
         method: "GET",
@@ -12,11 +15,10 @@ module.exports = function (req, res) {
         json: true, // Automatically parses the JSON string in the response
     };
 
-    console.log(`Requesting first name:${firstName} last name:${lastName} to ${reqUrl}`);
-
+    // Calls gateway
     rp(options).
         then(result => {
-            console.log("Response: " + JSON.stringify(result));
+            console.log("Response: " + JSON.stringify(result, null, 2));
             let dataToSend;
             if (typeof result !== "string") {
                 dataToSend = `${result[0].firstName} ${result[0].lastName} was born in ${result[0].birthday},` + 

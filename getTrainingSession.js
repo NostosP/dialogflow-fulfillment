@@ -2,8 +2,11 @@ var rp = require('request-promise');
 var url = `http://localhost:8082/training-sessions`;
 
 module.exports = function (req, res) {
+    // Parse date
     let sessionDate = req.body.queryResult.parameters.date;
     sessionDate = sessionDate.substring(0, 10);
+
+    // Builds request uri with query params
     const reqUrl = encodeURI(url + `?date=${sessionDate}`);                      
     var options = {
         method: "GET",
@@ -11,10 +14,12 @@ module.exports = function (req, res) {
         json: true, // Automatically parses the JSON string in the response
     };
 
+    // Calls gateway
     rp(options).
         then(result => {
-            console.log("Response: " + JSON.stringify(result));
+            console.log("Response: " + JSON.stringify(result, null, 2));
             let dataToSend;
+            // Parses duration (PTnHnMnS)
             if (typeof result !== "string") {
                 const hours = result[0].duration.substring(
                     result[0].duration.lastIndexOf("T") + 1,
