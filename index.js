@@ -1,10 +1,10 @@
 'use strict';
 
-const express = require('express');
-const bodyParser = require('body-parser');
-var getPlayerById = require('./getPlayerById'),
-    getTeamByName = require('./getTeamByName'),
-    notification = require('./notification'),
+const express = require('express'),
+    bodyParser = require('body-parser'),
+    getPlayerInfo = require('./getPlayerInfo'),
+    getSessionInfo = require('./getTrainingSession'),
+    comparePlayers = require('./comparePlayersPerformance'),
     port = process.env.PORT || 8000;   
 
 const server = express();
@@ -15,35 +15,25 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
-
+// Endpoint for agent requests
 server.post('/', (req, res) => {
 
-    if (req.body.queryResult.intent.displayName == "Find Player Intent - Get Name") {
-        console.log("Finding player...");
-        getPlayerById(req, res);        
-    } else if (req.body.queryResult.intent.displayName == "Find Team Intent - Get Name") {        
-        console.log("Finding team...");
-        getTeamByName(req, res);
-    } else if (req.body.queryResult.intent.displayName == "Image Intent") {
-        console.log("Finding image...");
-        return res.json({
-            "fulfillmentText": "Here is your image",
-            "fulfillmentMessages": [
-                {
-                    "card": {
-                        "title": "Here is your image",
-                        "subtitle": "but I'm very disappointed...",
-                        "imageUri": 'https://media.giphy.com/media/aMAE2PhvcHD4A/giphy.gif'                            
-                    }
-                }
-            ]
-        });
-    } else if (req.body.queryResult.intent.displayName == "Notification Intent") {
-        console.log('Sending notification...');
-        notification(req.body.originalDetectIntentRequest.payload.token);
-        return res.json({
-            "fulfillmentText" : 'Notification sent!'
-        })
+    switch (req.body.queryResult.action) {
+        case "GetPlayerInfo": {
+            console.log("Finding player...");
+            getPlayerInfo(req, res);}
+            break;
+        case "GetSessionInfo": {
+            console.log("FInding training session...")
+            getSessionInfo(req, res)
+            }
+            break;
+        case "ComparePerformance": {
+            console.log("Comparing players...");
+            comparePlayers(req, res);}
+            break;
+        default:
+            break;
     }
 
 });
