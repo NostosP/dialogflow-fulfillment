@@ -5,6 +5,7 @@ const express = require('express'),
     getPlayerInfo = require('./getPlayerInfo'),
     getSessionInfo = require('./getTrainingSession'),
     comparePlayers = require('./comparePlayersPerformance'),
+    getPerformanceTrend = require('./getPerformanceTrend'),
     port = process.env.PORT || 8000;   
 
 const server = express();
@@ -31,6 +32,13 @@ server.post('/', (req, res) => {
         case "ComparePerformance": {
             console.log("Comparing players...");
             comparePlayers(req, res);}
+            break;
+        case "GetPerformanceTrend": {
+            console.log("Calculating trend...");
+            getPerformanceTrend(req);
+            res.json({
+                "fulfillmentText": "Ok, I'll send you the data later."
+            });}
             break;
         default:
             break;

@@ -20,7 +20,6 @@ module.exports = function (req, res) {
     players.forEach(p => {
         reqUrl = reqUrl.concat("&name=" + p.name)
     })     
-
     var options = {
         method: "GET",
         uri: reqUrl,
